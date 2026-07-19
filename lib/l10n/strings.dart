@@ -33,6 +33,18 @@ abstract final class AppStrings {
   static const String startCall = 'Start call';
   static const String callError = 'Something went wrong with the call.';
   static const String waitingForPartner = 'Waiting for your partner…';
+  static const String joinCall = 'Join';
+  static const String endCall = 'End call';
+  static const String incomingCallTitle = 'Your partner started a call';
+  static const String incomingCallBody = 'Tap Join to hop in.';
+  static const String callStarting = 'Starting your call…';
+  static const String callInProgress = 'Call in progress';
+  static const String requestingCalendarAccess =
+      'Connecting to your Google Calendar…';
+  static const String calendarAccessDenied =
+      'Calendar access is needed to create a Meet link. Please allow it and try again.';
+  static const String couldNotOpenCall = 'Could not open the call link.';
+  static const String noActiveCall = 'No one has started a call yet.';
 
   // Mood
   static const String partnerMoodPrefix = 'is feeling';

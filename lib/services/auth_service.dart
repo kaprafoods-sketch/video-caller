@@ -68,4 +68,37 @@ class AuthService {
     await _googleSignIn.signOut();
     await _firebaseAuth.signOut();
   }
+
+  /// Requests the given OAuth [scopes] for the signed-in Google account and
+  /// returns a fresh access token that carries them. Throws [CalendarAuthException]
+  /// if the account is unavailable or the user denies the scopes.
+  Future<String> accessTokenForScopes(List<String> scopes) async {
+    var account = _googleSignIn.currentUser ?? await _googleSignIn.signInSilently();
+    if (account == null) {
+      // Fall back to interactive sign-in if there is no cached account.
+      account = await _googleSignIn.signIn();
+    }
+    if (account == null) {
+      throw CalendarAuthException('No Google account is available.');
+    }
+    final granted = await _googleSignIn.requestScopes(scopes);
+    if (!granted) {
+      throw CalendarAuthException('The requested Google scopes were denied.');
+    }
+    final auth = await account.authentication;
+    final token = auth.accessToken;
+    if (token == null) {
+      throw CalendarAuthException('Could not obtain a Google access token.');
+    }
+    return token;
+  }
+}
+
+/// Raised when the app cannot obtain a Google OAuth access token with the
+/// scopes needed (e.g. Calendar access for Meet link creation).
+class CalendarAuthException implements Exception {
+  CalendarAuthException(this.message);
+  final String message;
+  @override
+  String toString() => message;
 }

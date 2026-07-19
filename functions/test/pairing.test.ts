@@ -1,6 +1,6 @@
 process.env.FIRESTORE_EMULATOR_HOST ??= "127.0.0.1:8080";
 
-import { initializeApp } from "firebase-admin/app";
+import { initializeApp, getApps } from "firebase-admin/app";
 import { getFirestore, Timestamp } from "firebase-admin/firestore";
 import { describe, it, expect, beforeEach } from "vitest";
 import {
@@ -10,7 +10,9 @@ import {
   PairingError,
 } from "../src/pairingLogic";
 
-initializeApp({ projectId: "duet-dev" });
+if (getApps().length === 0) {
+  initializeApp({ projectId: "duet-dev" });
+}
 const db = getFirestore();
 
 async function seedUser(uid: string, coupleId: string | null = null): Promise<void> {
