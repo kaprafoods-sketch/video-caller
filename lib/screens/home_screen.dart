@@ -6,6 +6,7 @@ import '../l10n/strings.dart';
 import '../models/app_user.dart';
 import '../models/call.dart';
 import '../models/mood_entry.dart';
+import '../models/movie_genre.dart';
 import '../services/auth_service.dart';
 import '../services/call/call_service.dart';
 import '../services/call/call_service_locator.dart';
@@ -13,7 +14,9 @@ import '../services/couple_service.dart';
 import '../services/mood_service.dart';
 import '../services/pairing_service.dart';
 import '../theme/app_theme.dart';
+import '../widgets/genre_preferences_card.dart';
 import '../widgets/mood_check_in_card.dart';
+import '../widgets/movie_night_card.dart';
 import '../widgets/partner_mood_card.dart';
 
 /// The main screen shown once the user is signed in and paired.
@@ -311,6 +314,22 @@ class _HomeScreenState extends State<HomeScreen> {
                       currentMood: myMood,
                     );
                   },
+                ),
+                const SizedBox(height: AppSpacing.md),
+                // Favorite genres (edited inline, feeds movie suggestions)
+                GenrePreferencesCard(
+                  key: ValueKey('genres|${user.genrePreferences.join(',')}'),
+                  uid: user.uid,
+                  initialGenres: user.genrePreferences
+                      .map(MovieGenre.fromName)
+                      .whereType<MovieGenre>()
+                      .toList(),
+                ),
+                const SizedBox(height: AppSpacing.md),
+                // Movie night: suggestions + voting
+                MovieNightCard(
+                  coupleId: user.coupleId!,
+                  uid: user.uid,
                 ),
               ],
             ),

@@ -92,6 +92,7 @@ abstract final class AppStrings {
   static const String genrePreferencesTitle = 'Your favorite genres';
   static const String genrePreferencesHint =
       'Pick a few genres so suggestions fit you both.';
+  static const String saveGenres = 'Save genres';
   static const String genrePreferencesSaved = 'Genres saved';
   static const String genrePreferencesSaveError =
       'Could not save your genres. Please try again.';
