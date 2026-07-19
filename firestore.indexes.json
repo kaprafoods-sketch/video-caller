@@ -15,6 +15,15 @@
         { "fieldPath": "uid", "order": "ASCENDING" },
         { "fieldPath": "createdAt", "order": "DESCENDING" }
       ]
+    },
+    {
+      "collectionGroup": "prompts",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "authorUid", "order": "ASCENDING" },
+        { "fieldPath": "pairKey", "order": "ASCENDING" },
+        { "fieldPath": "unlockedAt", "order": "ASCENDING" }
+      ]
     }
   ],
   "fieldOverrides": []

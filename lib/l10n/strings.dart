@@ -117,6 +117,29 @@ abstract final class AppStrings {
   static const String genreWar = 'War';
   static const String genreWestern = 'Western';
 
+  // Prompts & confessions
+  static const String promptsTitle = 'Prompts & confessions';
+  static const String promptsLobbySubtitle = 'Ask, confess, and unlock together.';
+  static const String promptTypeQuestion = 'Question';
+  static const String promptTypeConfession = 'Confession';
+  static const String pickQuestion = 'Pick a question';
+  static const String yourAnswerHint = 'Your answer…';
+  static const String yourConfessionHint =
+      "Something you've been meaning to say…";
+  static const String sealAnswer = 'Seal my answer';
+  static const String sealConfession = 'Seal my confession';
+  static const String promptSealed =
+      'Sealed 🤫 It unlocks when your partner shares too.';
+  static const String promptSealError =
+      'Could not seal that. Please try again.';
+  static const String promptsEmpty = 'Nothing here yet — break the ice above.';
+  static const String promptSealedWaiting =
+      'Sealed — waiting for your partner to share.';
+  static const String promptRevealedTogether = 'Revealed together';
+  static const String promptFromYou = 'You';
+  static const String promptFromPartner = 'Your partner';
+  static const String pickAQuestionFirst = 'Pick a question first.';
+
   // Errors
   static const String genericError = 'Something went wrong. Please try again.';
 

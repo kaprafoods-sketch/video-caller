@@ -5,3 +5,4 @@ initializeApp();
 export { createInvite, redeemInvite, unpair } from "./pairing";
 export { createCall, endCall } from "./calls";
 export { suggestMovies } from "./movies";
+export { onPromptCreated } from "./prompts";

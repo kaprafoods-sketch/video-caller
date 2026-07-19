@@ -14,6 +14,7 @@ import '../services/couple_service.dart';
 import '../services/mood_service.dart';
 import '../services/pairing_service.dart';
 import '../theme/app_theme.dart';
+import 'prompts_screen.dart';
 import '../widgets/genre_preferences_card.dart';
 import '../widgets/mood_check_in_card.dart';
 import '../widgets/movie_night_card.dart';
@@ -330,6 +331,21 @@ class _HomeScreenState extends State<HomeScreen> {
                 MovieNightCard(
                   coupleId: user.coupleId!,
                   uid: user.uid,
+                ),
+                const SizedBox(height: AppSpacing.md),
+                // Prompts & confessions entry point
+                Card(
+                  child: ListTile(
+                    leading: const Icon(Icons.forum_outlined),
+                    title: const Text(AppStrings.promptsTitle),
+                    subtitle: const Text(AppStrings.promptsLobbySubtitle),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => PromptsScreen(user: user),
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
