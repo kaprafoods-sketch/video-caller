@@ -48,6 +48,26 @@ abstract final class AppStrings {
 
   // Mood
   static const String partnerMoodPrefix = 'is feeling';
+  static const String moodHappy = 'Happy';
+  static const String moodLoved = 'Loved';
+  static const String moodCalm = 'Calm';
+  static const String moodPlayful = 'Playful';
+  static const String moodTired = 'Tired';
+  static const String moodStressed = 'Stressed';
+  static const String moodSad = 'Sad';
+  static const String moodAnxious = 'Anxious';
+  static const String checkInTitle = 'How are you feeling?';
+  static const String checkInSubtitle =
+      'Shared openly with your partner — no judgment here.';
+  static const String checkInNoteHint = 'Add a note (optional)';
+  static const String saveMood = 'Share how I feel';
+  static const String moodSaved = 'Mood shared 💛';
+  static const String moodSaveError =
+      'Could not save your mood. Please try again.';
+  static const String partnerNoMoodSuffix = "hasn't checked in yet";
+  static const String partnerWaitingToJoin =
+      'Waiting for your partner to join Duet.';
+  static const String yourMoodLabel = 'Your mood';
 
   // Errors
   static const String genericError = 'Something went wrong. Please try again.';

@@ -5,11 +5,16 @@ import 'package:url_launcher/url_launcher.dart';
 import '../l10n/strings.dart';
 import '../models/app_user.dart';
 import '../models/call.dart';
+import '../models/mood_entry.dart';
 import '../services/auth_service.dart';
 import '../services/call/call_service.dart';
 import '../services/call/call_service_locator.dart';
+import '../services/couple_service.dart';
+import '../services/mood_service.dart';
 import '../services/pairing_service.dart';
 import '../theme/app_theme.dart';
+import '../widgets/mood_check_in_card.dart';
+import '../widgets/partner_mood_card.dart';
 
 /// The main screen shown once the user is signed in and paired.
 class HomeScreen extends StatefulWidget {
@@ -23,6 +28,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   bool _starting = false;
+  late final CoupleService _coupleService = CoupleService();
+  late final MoodService _moodService = MoodService();
 
   AppUser get user => widget.user;
 
@@ -165,7 +172,7 @@ class _HomeScreenState extends State<HomeScreen> {
               if (call != null && call.startedBy == user.uid) {
                 return _buildCallInProgress(theme, call);
               }
-              return _buildNoActiveCall(theme);
+              return _buildLobby();
             },
           ),
         ),
@@ -251,23 +258,61 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildNoActiveCall(ThemeData theme) {
+  Widget _buildLobby() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Expanded(
-          child: Card(
-            child: Padding(
-              padding: const EdgeInsets.all(AppSpacing.lg),
-              child: Center(
-                child: Text(
-                  AppStrings.waitingForPartner,
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Partner mood section
+                StreamBuilder<AppUser?>(
+                  stream: _coupleService.watchPartner(
+                    coupleId: user.coupleId!,
+                    myUid: user.uid,
                   ),
+                  builder: (context, partnerSnap) {
+                    final partner = partnerSnap.data;
+                    if (partner == null) {
+                      return const PartnerMoodCard(
+                        partner: null,
+                        partnerMood: null,
+                      );
+                    }
+                    return StreamBuilder<MoodEntry?>(
+                      stream: _moodService.watchLatestMood(
+                        coupleId: user.coupleId!,
+                        uid: partner.uid,
+                      ),
+                      builder: (context, moodSnap) => PartnerMoodCard(
+                        partner: partner,
+                        partnerMood: moodSnap.data,
+                      ),
+                    );
+                  },
                 ),
-              ),
+                const SizedBox(height: AppSpacing.md),
+                // My mood check-in section
+                StreamBuilder<MoodEntry?>(
+                  stream: _moodService.watchLatestMood(
+                    coupleId: user.coupleId!,
+                    uid: user.uid,
+                  ),
+                  builder: (context, mySnap) {
+                    final myMood = mySnap.data;
+                    return MoodCheckInCard(
+                      // Recreate when the persisted mood changes so it
+                      // pre-selects correctly.
+                      key: ValueKey('${myMood?.mood.name}|${myMood?.note}'),
+                      coupleId: user.coupleId!,
+                      uid: user.uid,
+                      currentMood: myMood,
+                    );
+                  },
+                ),
+              ],
             ),
           ),
         ),
