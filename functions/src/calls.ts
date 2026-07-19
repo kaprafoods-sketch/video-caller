@@ -2,6 +2,7 @@ import { onCall, HttpsError } from "firebase-functions/v2/https";
 import { getFirestore } from "firebase-admin/firestore";
 import { CallError, createCallFor, endCallFor } from "./callsLogic";
 import { createGoogleMeetLink } from "./googleMeet";
+import { MAX_INSTANCES } from "./runtimeOptions";
 
 function mapCallError(e: unknown): never {
   if (e instanceof CallError) {
@@ -19,7 +20,7 @@ function mapCallError(e: unknown): never {
   throw e;
 }
 
-export const createCall = onCall(async (request) => {
+export const createCall = onCall({ maxInstances: MAX_INSTANCES }, async (request) => {
   if (!request.auth) {
     throw new HttpsError("unauthenticated", "Must be signed in.");
   }
@@ -37,7 +38,7 @@ export const createCall = onCall(async (request) => {
   }
 });
 
-export const endCall = onCall(async (request) => {
+export const endCall = onCall({ maxInstances: MAX_INSTANCES }, async (request) => {
   if (!request.auth) {
     throw new HttpsError("unauthenticated", "Must be signed in.");
   }

@@ -3,6 +3,7 @@ import { defineSecret } from "firebase-functions/params";
 import { getFirestore } from "firebase-admin/firestore";
 import { MovieError, suggestMoviesFor } from "./moviesLogic";
 import { fetchTmdbSuggestions } from "./tmdb";
+import { MAX_INSTANCES } from "./runtimeOptions";
 
 const tmdbApiKey = defineSecret("TMDB_API_KEY");
 
@@ -19,7 +20,9 @@ function mapMovieError(e: unknown): never {
   throw e;
 }
 
-export const suggestMovies = onCall({ secrets: [tmdbApiKey] }, async (request) => {
+export const suggestMovies = onCall(
+  { secrets: [tmdbApiKey], maxInstances: MAX_INSTANCES },
+  async (request) => {
   if (!request.auth) {
     throw new HttpsError("unauthenticated", "Must be signed in.");
   }

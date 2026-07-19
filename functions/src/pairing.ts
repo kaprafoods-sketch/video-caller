@@ -1,8 +1,9 @@
 import { onCall, HttpsError } from "firebase-functions/v2/https";
 import { getFirestore } from "firebase-admin/firestore";
 import { PairingError, createInviteFor, redeemInviteFor, unpairFor } from "./pairingLogic";
+import { MAX_INSTANCES } from "./runtimeOptions";
 
-export const createInvite = onCall(async (request) => {
+export const createInvite = onCall({ maxInstances: MAX_INSTANCES }, async (request) => {
   if (!request.auth) {
     throw new HttpsError("unauthenticated", "Must be signed in.");
   }
@@ -16,7 +17,7 @@ export const createInvite = onCall(async (request) => {
   }
 });
 
-export const redeemInvite = onCall(async (request) => {
+export const redeemInvite = onCall({ maxInstances: MAX_INSTANCES }, async (request) => {
   if (!request.auth) {
     throw new HttpsError("unauthenticated", "Must be signed in.");
   }
@@ -31,7 +32,7 @@ export const redeemInvite = onCall(async (request) => {
   }
 });
 
-export const unpair = onCall(async (request) => {
+export const unpair = onCall({ maxInstances: MAX_INSTANCES }, async (request) => {
   if (!request.auth) {
     throw new HttpsError("unauthenticated", "Must be signed in.");
   }

@@ -1,13 +1,17 @@
 import { onDocumentCreated } from "firebase-functions/v2/firestore";
 import { getFirestore } from "firebase-admin/firestore";
 import { unlockMatchingPrompts } from "./promptsLogic";
+import { MAX_INSTANCES } from "./runtimeOptions";
 
 /**
  * When a partner seals a prompt, try to reveal it together with a matching
  * sealed prompt from the other partner. See promptsLogic for the mechanic.
  */
 export const onPromptCreated = onDocumentCreated(
-  "couples/{coupleId}/prompts/{promptId}",
+  {
+    document: "couples/{coupleId}/prompts/{promptId}",
+    maxInstances: MAX_INSTANCES,
+  },
   async (event) => {
     const snap = event.data;
     if (!snap) return;
