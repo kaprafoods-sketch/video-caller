@@ -1,0 +1,25 @@
+{
+  "name": "duet-functions",
+  "private": true,
+  "engines": {
+    "node": "20"
+  },
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "firebase emulators:exec --only auth,firestore,functions \"vitest run\"",
+    "serve": "firebase emulators:start"
+  },
+  "dependencies": {
+    "firebase-admin": "^12",
+    "firebase-functions": "^5"
+  },
+  "devDependencies": {
+    "typescript": "^5",
+    "vitest": "^2",
+    "firebase": "^10",
+    "@firebase/rules-unit-testing": "^3",
+    "firebase-tools": "^13",
+    "@types/node": "^20"
+  }
+}

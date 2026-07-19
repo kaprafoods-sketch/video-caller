@@ -1,0 +1,72 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function coupleData(coupleId) {
+      return get(/databases/$(database)/documents/couples/$(coupleId)).data;
+    }
+
+    function isMember(coupleId) {
+      return isSignedIn() && request.auth.uid in coupleData(coupleId).memberUids;
+    }
+
+    function coupleIsFull(coupleId) {
+      return coupleData(coupleId).memberUids.size() == 2;
+    }
+
+    match /users/{uid} {
+      allow read: if isSignedIn() && (
+        request.auth.uid == uid ||
+        (resource.data.coupleId != null && request.auth.uid != uid &&
+          request.auth.uid in coupleData(resource.data.coupleId).memberUids)
+      );
+      allow create: if request.auth.uid == uid && request.resource.data.coupleId == null;
+      allow update: if request.auth.uid == uid && request.resource.data.coupleId == resource.data.coupleId;
+      allow delete: if false;
+    }
+
+    match /couples/{coupleId} {
+      allow read: if isMember(coupleId);
+      allow write: if false; // all couple doc writes go through Cloud Functions (Admin SDK)
+
+      match /moods/{moodId} {
+        allow read: if isMember(coupleId) && coupleIsFull(coupleId);
+        allow create: if isMember(coupleId) && coupleIsFull(coupleId) && request.resource.data.uid == request.auth.uid;
+        allow update, delete: if isMember(coupleId) && coupleIsFull(coupleId) && resource.data.uid == request.auth.uid;
+      }
+
+      match /calls/{callId} {
+        allow read: if isMember(coupleId) && coupleIsFull(coupleId);
+        allow create: if isMember(coupleId) && coupleIsFull(coupleId) && request.resource.data.startedBy == request.auth.uid;
+        allow update: if isMember(coupleId) && coupleIsFull(coupleId); // either partner can mark endedAt
+        allow delete: if false;
+      }
+
+      match /movieNights/{id} {
+        allow read: if isMember(coupleId) && coupleIsFull(coupleId);
+        allow create, update: if isMember(coupleId) && coupleIsFull(coupleId);
+        allow delete: if false;
+      }
+
+      match /prompts/{promptId} {
+        allow read: if isMember(coupleId) && coupleIsFull(coupleId) &&
+          (resource.data.authorUid == request.auth.uid || resource.data.unlockedAt != null);
+        allow create: if isMember(coupleId) && coupleIsFull(coupleId) &&
+          request.resource.data.authorUid == request.auth.uid &&
+          request.resource.data.unlockedAt == null &&
+          (request.resource.data.type == 'confession' || request.resource.data.type == 'question');
+        allow update, delete: if false; // unlockedAt set only by Cloud Function (Admin SDK)
+      }
+    }
+
+    // default deny everything else
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
