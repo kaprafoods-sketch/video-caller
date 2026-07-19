@@ -69,6 +69,53 @@ abstract final class AppStrings {
       'Waiting for your partner to join Duet.';
   static const String yourMoodLabel = 'Your mood';
 
+  // Movie night
+  static const String movieNightTitle = 'Movie night';
+  static const String movieNightSubtitle =
+      'Get suggestions you both might love, then vote.';
+  static const String suggestMovies = 'Suggest movies';
+  static const String suggestingMovies = 'Finding movies for you two…';
+  static const String movieSuggestError =
+      'Could not fetch movie suggestions. Please try again.';
+  static const String noSuggestionsFound =
+      'No movies matched your tastes — try adding more genres.';
+  static const String voteHint = 'Tap the movies you would watch tonight.';
+  static const String submitVotes = 'Lock in my picks';
+  static const String votesSaved = 'Picks saved 🍿';
+  static const String voteSaveError =
+      'Could not save your picks. Please try again.';
+  static const String waitingForPartnerVotes =
+      'Waiting for your partner to pick…';
+  static const String itsAMatch = "It's a match!";
+  static const String noMatchesYet =
+      'No overlap this time — vote again or pick together.';
+  static const String genrePreferencesTitle = 'Your favorite genres';
+  static const String genrePreferencesHint =
+      'Pick a few genres so suggestions fit you both.';
+  static const String genrePreferencesSaved = 'Genres saved';
+  static const String genrePreferencesSaveError =
+      'Could not save your genres. Please try again.';
+
+  // Genres
+  static const String genreAction = 'Action';
+  static const String genreAdventure = 'Adventure';
+  static const String genreAnimation = 'Animation';
+  static const String genreComedy = 'Comedy';
+  static const String genreCrime = 'Crime';
+  static const String genreDocumentary = 'Documentary';
+  static const String genreDrama = 'Drama';
+  static const String genreFamily = 'Family';
+  static const String genreFantasy = 'Fantasy';
+  static const String genreHistory = 'History';
+  static const String genreHorror = 'Horror';
+  static const String genreMusic = 'Music';
+  static const String genreMystery = 'Mystery';
+  static const String genreRomance = 'Romance';
+  static const String genreScienceFiction = 'Sci-Fi';
+  static const String genreThriller = 'Thriller';
+  static const String genreWar = 'War';
+  static const String genreWestern = 'Western';
+
   // Errors
   static const String genericError = 'Something went wrong. Please try again.';
 
